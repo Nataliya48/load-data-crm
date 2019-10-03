@@ -1,5 +1,5 @@
 $('#upload').on('click', function() {
-    var file_data = $('#sortpicture').prop('files')[0];
+    var file_data = $('#loadfile').prop('files')[0];
     var form_data = new FormData();
     form_data.append('file', file_data);
     alert(form_data);
