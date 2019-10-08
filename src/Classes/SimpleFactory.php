@@ -4,8 +4,10 @@ use \RetailCrm\ApiClient;
 class SimpleFactory
 {
     /**
-     * @param string $url
-     * @param string $apiKey
+     * Поделючение к retailCRM
+     *
+     * @param string $url адрес retailCRM
+     * @param string $apiKey API ключ retailCRM
      * @return ApiClient
      */
     public function createApiClient($url, $apiKey): ApiClient

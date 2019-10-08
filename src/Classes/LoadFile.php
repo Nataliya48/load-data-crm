@@ -5,47 +5,43 @@ class LoadFile
 {
     /**
      * Загружаемый с формы файл
-     * @var
+     * @var array
      */
     private $tmpFile;
 
     /**
+     * Директория хранения локального файла
+     *
+     * @var bool|string
+     */
+    private $path;
+
+
+    /**
      * LoadFile constructor.
-     * @param $file загружаемый с формы файл
+     * @param array $file загружаемый с формы файл
+     * @throws \Exception
      */
     public function __construct($file)
     {
         $this->tmpFile = $file;
+
         if ($this->tmpFile['error']) {
             throw new \Exception('File Download Error #' . $this->tmpFile['error']);
         }
-    }
 
-    private function fileDir()
-    {
+        if (!is_uploaded_file($this->tmpFile['tmp_name'])) {
+            throw new \Exception('Access denied');
+        }
 
-    }
+        if (mb_detect_encoding(file_get_contents($this->tmpFile['tmp_name'])) !== 'UTF-8') {
+            throw new \Exception('Incorrect encoding. Use UTF-8');
+        }
 
+        $this->path = realpath(__DIR__ . '/../../storage/');
 
-    /*move_uploaded_file(
-        // временное расположение файла
-        $_FILES['file']['tmp_name'],
-        // конечный путь к файлу и его название
-        'uploads/' . $_FILES['file']['name']
-    );
-
-    move_uploaded_file(
-        $_FILES['file']['tmp_name'],
-        'uploads/my_new_filename.whatever'
-    );*/
-
-
-    private function loadFile(){
-        if ( 0 < $_FILES['file']['error'] ) {
-	        echo 'Error: ' . $_FILES['file']['error'] . '<br>';
-	    }
-	    else {
-	        move_uploaded_file($_FILES['file']['tmp_name'], 'uploads/' . $_FILES['file']['name']);
-	    }
+        if (!file_exists($this->path)) {
+            mkdir($this->path, 0777, true);
+        }
     }
 }
